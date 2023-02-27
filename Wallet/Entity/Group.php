@@ -3,31 +3,30 @@
 namespace app\Wallet\Entity;
 
 /**
- * This is the model class for table "category".
+ * This is the model class for table "group".
  *
  * @property int $id
  * @property int $account_id
- * @property int $group_id
  * @property string $name
  * @property string $description
  * @property int $status
  * @property int $del
  *
  */
-class Category extends \yii\db\ActiveRecord
+class Group extends \yii\db\ActiveRecord
 {
 
     public static function tableName()
     {
-        return 'category';
+        return 'group';
     }
 
 
     public function rules()
     {
         return [
-            [['account_id', 'group_id', 'name'], 'required'],
-            [['id', 'account_id', 'group_id', 'status', 'del'], 'integer'],
+            [['account_id', 'name'], 'required'],
+            [['id', 'account_id', 'status', 'del'], 'integer'],
             [['name', 'description'], 'string'],
         ];
     }
