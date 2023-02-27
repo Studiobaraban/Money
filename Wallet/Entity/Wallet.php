@@ -12,6 +12,8 @@ use yii\db\Transaction;
  * @property int $user_id
  * @property string $name
  * @property string $description
+ * @property string $currency
+ * @property float $balance
  * @property int $status
  *
  */
@@ -29,8 +31,17 @@ class Wallet extends \yii\db\ActiveRecord
         return [
             [['user_id', 'name'], 'required'],
             [['id', 'user_id', 'status'], 'integer'],
-            [['name', 'description'], 'string']
+            [['name', 'description', 'currency'], 'string'],
+            [['balance'], 'number']
         ];
+    }
+
+
+    // изменить баланс на сумму $sum
+    public function changeBalance(float $sum): void
+    {
+        $this->balance = $this->balance + $sum;
+        $this->save();
     }
 
 

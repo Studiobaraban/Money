@@ -1,6 +1,6 @@
 <?php
 
-namespace app\Order\Repository;
+namespace app\Wallet\Repository;
 
 use app\Wallet\Entity\Transaction;
 
