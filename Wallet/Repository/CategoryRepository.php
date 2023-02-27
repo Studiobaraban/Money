@@ -9,7 +9,7 @@ class CategoryRepository extends \yii\db\ActiveRecord
 
     public function list($account_id, bool $asArray = false): ?array
     {
-        $q = Category::find()->where(['account_id' => $account_id]);
+        $q = Category::find()->where(['account_id' => $account_id, 'del' => 0]);
 
         if (!empty($asArray)) {
             $q->asArray();
