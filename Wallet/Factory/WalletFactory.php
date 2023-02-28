@@ -12,6 +12,7 @@ class WalletFactory
         $wallet->user_id = $user_id;
         $wallet->name = $name;
         $wallet->description = $description;
+        $wallet->balance = 0;
         $wallet->status = 1;
         $wallet->save();
 

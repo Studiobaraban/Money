@@ -31,4 +31,10 @@ class Group extends \yii\db\ActiveRecord
         ];
     }
 
+    public function getCategories()
+    {
+        return $this->hasMany(Category::class, ['group_id' => 'id']);
+    }
+
+
 }

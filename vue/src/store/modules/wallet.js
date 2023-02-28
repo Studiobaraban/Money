@@ -13,6 +13,14 @@ export default {
         walletsF: [],
         wallet: {},
 
+        groups: [],
+        groupsF: [],
+        group: {},
+
+        categories: [],
+        categoriesF: [],
+        category: {},
+
         transactions: [],
         transactionsF: [],
         transaction: {},
@@ -45,6 +53,28 @@ export default {
             state.wallet = wallet;
         },
 
+        setGroups(state, groups) {
+            state.groups = groups;
+            state.groupsF = groups;
+        },
+        setGroupsF(state, groups) {
+            state.groupsF = groups;
+        },
+        setGroup(state, group) {
+            state.group = group;
+        },
+
+        setCategories(state, categories) {
+            state.categories = categories;
+            state.categoriesF = categories;
+        },
+        setCategoriesF(state, categories) {
+            state.categoriesF = categories;
+        },
+        setCategory(state, category) {
+            state.category = category;
+        },
+
         setTransactions(state, transactions) {
             state.transactions = transactions;
             state.transactionsF = transactions;
@@ -64,6 +94,15 @@ export default {
                 ctx.commit("setAccount", res.data.account);
                 ctx.commit("setUsers", res.data.users);
                 ctx.commit("setWallets", res.data.wallets);
+                ctx.commit("setGroups", res.data.groups);
+                ctx.commit("setTransactions", res.data.transactions);
+
+                let cats = [];
+                res.data.groups.forEach((group) => {
+                    group.categories.forEach((category) => cats.push({ id: category.id, name: category.name }));
+                    group.categories.forEach((category) => (ctx.rootState.select.category[category.id] = category.name)); // для селекта
+                });
+                ctx.commit("setCategories", cats);
             });
         },
 
@@ -92,6 +131,37 @@ export default {
             } else {
                 router.push("/wallet");
             }
+        },
+
+        addGroup(ctx, name) {
+            let formData = new FormData();
+            formData.append("name", name);
+            API.POST("account/add-group", formData).then((res) => {
+                ctx.commit("setGroups", res.data.groups);
+            });
+        },
+
+        addCategory(ctx, data) {
+            let formData = new FormData();
+            formData.append("name", data.name);
+            formData.append("group_id", data.group_id);
+            API.POST("account/add-category", formData).then((res) => {
+                ctx.commit("setGroups", res.data.groups);
+            });
+        },
+
+        addTransaction(ctx, data) {
+            console.log("addTransaction", data);
+            let formData = new FormData();
+            formData.append("category_id", data.category.id);
+            formData.append("wallet_id", data.wallet.id);
+            if (data.type == 2) data.sum = data.sum * -1;
+            formData.append("sum", data.sum);
+            formData.append("description", data.name);
+            API.POST("account/add-transaction", formData).then((res) => {
+                console.log("transactions", res.data.transactions);
+                ctx.commit("setTransactions", res.data.transactions);
+            });
         },
 
         findOrder(ctx, s) {
@@ -217,6 +287,20 @@ export default {
         },
         wallet(state) {
             return state.wallet;
+        },
+
+        groups(state) {
+            return state.groupsF;
+        },
+        group(state) {
+            return state.group;
+        },
+
+        categories(state) {
+            return state.categoriesF;
+        },
+        category(state) {
+            return state.category;
         },
 
         transactions(state) {

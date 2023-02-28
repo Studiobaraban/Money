@@ -2,7 +2,12 @@
 
 namespace app\controllers;
 
+use app\Wallet\Factory\CategoryFactory;
+use app\Wallet\Factory\GroupFactory;
+use app\Wallet\Factory\TransactionFactory;
 use app\Wallet\Factory\WalletFactory;
+use app\Wallet\Repository\CategoryRepository;
+use app\Wallet\Repository\GroupRepository;
 use app\Wallet\Repository\WalletRepository;
 use Yii;
 
@@ -42,10 +47,23 @@ class AccountController extends Controller
         $accountR = new AccountRepository();
         $account = $accountR->one(1, true);
 
-        return ['account' => $account, 'users' => $account['users'], 'wallets' => $account['wallets']];
+        $groupR = new GroupRepository();
+        $groups = $groupR->list($this->user->account_id, true);
+
+        $transactionR = new TransactionRepository();
+        $transactions = $transactionR->list(null, true);
+
+        return [
+            'account' => $account,
+            'users' => $account['users'],
+            'wallets' => $account['wallets'],
+            'groups' => $groups,
+            'transactions' => $transactions
+        ];
     }
 
 
+    // добавить кошелек
     public function actionAddWallet()
     {
         $walletF = new WalletFactory();
@@ -55,6 +73,56 @@ class AccountController extends Controller
         $wallets = $walletR->list($this->user->id, true);
 
         return ['wallets' => $wallets];
+    }
+
+
+    // добавить группу
+    public function actionAddGroup()
+    {
+        $post = Yii::$app->getRequest()->post();
+
+        $groupF = new GroupFactory();
+        $groupF->create($this->user->account_id, $post['name']);
+
+        $groupR = new GroupRepository();
+        $groups = $groupR->list($this->user->account_id, true);
+
+        return ['groups' => $groups];
+    }
+
+
+    // добавить категорию
+    public function actionAddCategory()
+    {
+        $post = Yii::$app->getRequest()->post();
+
+        $categoryF = new CategoryFactory();
+        $categoryF->create($this->user->account_id, $post['group_id'], $post['name']);
+
+        $groupR = new GroupRepository();
+        $groups = $groupR->list($this->user->account_id, true);
+
+        return ['groups' => $groups];
+    }
+
+
+    // добавить категорию
+    public function actionAddTransaction()
+    {
+        $post = Yii::$app->getRequest()->post();
+
+        $wallet = Wallet::find()->where(['id' => $post['wallet_id'], 'user_id' => $this->user->id])->one();
+        if (empty($wallet)) {
+            return null;
+        }
+
+        $transactionF = new TransactionFactory();
+        $transactionF->create($wallet, $post['category_id'], $post['sum'], $post['description']);
+
+        $transactionR = new TransactionRepository();
+        $transactions = $transactionR->list(null, true);
+
+        return ['transactions' => $transactions];
     }
 
 
