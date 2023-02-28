@@ -8,6 +8,8 @@ use Yii;
  * This is the model class for table "user".
  *
  * @property int $id
+ * @property int $account_id
+ * @property string $roles
  * @property string $token
  * @property string $username
  * @property string $auth_key
@@ -31,10 +33,10 @@ class User extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['username', 'auth_key', 'password_hash', 'created_at', 'updated_at'], 'required'],
-            [['status', 'created_at', 'updated_at'], 'integer'],
+            [['account_id', 'username', 'auth_key', 'password_hash'], 'required'],
+            [['account_id', 'status', 'created_at', 'updated_at'], 'integer'],
             [['username', 'auth_key'], 'string', 'max' => 32],
-            [['token', 'password_hash', 'password_reset_token', 'email'], 'string', 'max' => 255],
+            [['roles', 'token', 'password_hash', 'password_reset_token', 'email'], 'string', 'max' => 255],
         ];
     }
 

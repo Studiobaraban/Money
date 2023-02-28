@@ -2,13 +2,11 @@
 
 namespace app\User\Entity;
 
-use app\User\Entity\User;
-
 /**
  * This is the model class for table "account".
  *
  * @property int $id
- * @property int $user_id
+ * @property string $name
  * @property int $status
  *
  * @property User $user
@@ -25,15 +23,14 @@ class Account extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['user_id', 'status'], 'required'],
-            [['user_id', 'status'], 'integer'],
-            [['user_id'], 'exist', 'skipOnError' => true, 'targetClass' => User::class, 'targetAttribute' => ['user_id' => 'id']],
+            [['name'], 'string', 'max' => 255],
+            [['status'], 'integer'],
         ];
     }
 
 
-    public function getUser()
+    public function getUsers()
     {
-        return $this->hasOne(User::class, ['id' => 'user_id']);
+        return $this->hasMany(Profile::class, ['user_id' => 'id'])->viaTable('user', ['account_id' => 'id']);
     }
 }
