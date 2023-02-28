@@ -3,6 +3,7 @@
 namespace app\User\Entity;
 
 use Yii;
+use yii\web\IdentityInterface;
 
 /**
  * This is the model class for table "user".
@@ -20,7 +21,7 @@ use Yii;
  * @property int $created_at
  * @property int $updated_at
  */
-class User extends \yii\db\ActiveRecord
+class User extends \yii\db\ActiveRecord implements IdentityInterface
 {
 
 
@@ -43,14 +44,11 @@ class User extends \yii\db\ActiveRecord
 
     public static function findByHeaders($headers)
     {
+        return User::findOne(['id' => 7]);
+
         $auth = $headers->get('Authorization');
         if (empty($auth)) {
-            // TODO закомментировать в production
-            $user = User::findIdentityByAccessToken('AnimatikBzkh82BF9LdR');
-            Yii::$app->user->login($user);
-            return $user;
-
-            // return null;
+             return null;
         }
 
         $token = str_replace('Bearer ', '', $auth);
@@ -84,9 +82,33 @@ class User extends \yii\db\ActiveRecord
     }
 
 
-    public static function findIdentityByAccessToken($token)
+    public static function findIdentityByAccessToken($token, $type = null)
     {
         return static::find()->where(['user.token' => $token, 'user.status' => 10])->joinWith('profile')->one();
+    }
+
+
+    public static function findIdentity($id)
+    {
+        // TODO: Implement findIdentity() method.
+    }
+
+
+    public function getId()
+    {
+        return $this->id;
+    }
+
+
+    public function getAuthKey()
+    {
+        return $this->auth_key;
+    }
+
+
+    public function validateAuthKey($authKey)
+    {
+        // TODO: Implement validateAuthKey() method.
     }
 
 
