@@ -103,7 +103,6 @@ $config = [
                 '<controller:\w+>/<action:\w+>' => '<controller>/<action>',
                 '<controller:\w+>/<action:\w+>/<id:\d+>' => '<controller>/<action>',
 
-                '<module>/<controller>' => '<module>/<controller>/index',
                 '<module>/<controller>/<id:\d+>' => '<module>/<controller>/view',
                 '<module>/<controller>/<action>' => '<module>/<controller>/<action>',
                 '<module>/<controller>/<action>/<id:\d+>' => '<module>/<controller>/<action>',
@@ -114,11 +113,15 @@ $config = [
         'user' => [
             'class' => 'app\User\Module',
         ],
+        'wallet' => [
+            'class' => 'app\Wallet\Module',
+        ],
     ],
     'as access' => [
         'class' => 'mdm\admin\components\AccessControl',
         'allowActions' => [
             'site/*',
+            'account/*',
             'debug/*',
             'gii/*'
         ]
