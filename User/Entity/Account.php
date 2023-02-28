@@ -2,6 +2,8 @@
 
 namespace app\User\Entity;
 
+use app\Wallet\Entity\Wallet;
+
 /**
  * This is the model class for table "account".
  *
@@ -32,5 +34,11 @@ class Account extends \yii\db\ActiveRecord
     public function getUsers()
     {
         return $this->hasMany(Profile::class, ['user_id' => 'id'])->viaTable('user', ['account_id' => 'id']);
+    }
+
+
+    public function getWallets()
+    {
+        return $this->hasMany(Wallet::class, ['user_id' => 'id'])->viaTable('user', ['account_id' => 'id']);
     }
 }

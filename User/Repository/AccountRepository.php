@@ -9,7 +9,7 @@ class AccountRepository extends \yii\db\ActiveRecord
 
     public function one(int $id, bool $asArray = false)
     {
-        $q = Account::find()->where(['account.id' => $id])->joinWith('users');
+        $q = Account::find()->where(['account.id' => $id])->joinWith(['users', 'wallets']);
 
         if (!empty($asArray)) {
             $q->asArray();
