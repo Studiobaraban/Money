@@ -1,8 +1,19 @@
 <template>
     <div class="min-h-full bg-gradient-to-tr from-cyan-200 via-cyan-100/50 to-sky-200 max-xl:flex-col">
-        <div class="p-5 v-bbgray">
-            <div class="flex justify-center text-lg font-latobold mb-4">ПОЛЬЗОВАТЕЛИ</div>
-            <div class="flex justify-center gap-4">
+        <div class="absolute top-4 left-4">
+            <div @click="popup = 'categories'" class="text-sky-400 text-xs font-bold">+ КАТЕГОРИИ</div>
+        </div>
+
+        <div class="absolute top-4 right-4">
+            <div class="flex text-xs gap-4">
+                <div @click="outcome(1)" class="text-teal-400 font-bold">+ ДОХОД</div>
+                <div @click="outcome(2)" class="text-pink-400 font-bold">- РАСХОД</div>
+            </div>
+        </div>
+
+        <div class="p-2 pt-10">
+            <!-- <div class="flex justify-center text-lg font-bold mb-4">ПОЛЬЗОВАТЕЛИ</div> -->
+            <div class="flex justify-center gap-2">
                 <div v-for="user in users" :key="user.id" class="flex items-center w-60 rounded-full border-2 border-white bg-white/50">
                     <img v-if="user?.picture" class="w-14 h-14 rounded-full mr-4" :src="'http://localhost/uploads/user/' + user?.picture" />
                     <img v-else class="w-14 h-14 mr-4" src="http://localhost/uploads/user/u0.png" />
@@ -11,84 +22,49 @@
             </div>
         </div>
 
-        <div class="absolute top-4 right-4">
-            <div class="flex justify-center text-lg font-latobold mb-4">ДОБАВИТЬ</div>
-            <div class="flex text-xs gap-4">
-                <div @click="outcome(1)">ДОХОД</div>
-                <div @click="outcome(2)">РАСХОД</div>
-            </div>
-        </div>
-
-        <div class="p-5 v-bbgray">
-            <div class="flex justify-center text-lg font-latobold mb-4">КОШЕЛЬКИ</div>
-            <div class="flex justify-center gap-4">
-                <div v-for="wallet in wallets" :key="wallet.id" class="flex items-center w-60 rounded-full border-2 border-white bg-white/50">
+        <div class="p-2">
+            <div class="flex justify-center text-lg mb-4 font-light text-sky-800/30">КОШЕЛЬКИ</div>
+            <div class="grid grid-cols-4 gap-4 max-sm:grid-cols-2">
+                <div v-for="wallet in wallets" :key="wallet.id" class="flex items-center w-full rounded-full border-2 border-white bg-white/50">
                     <img
                         v-if="wallet?.picture"
                         class="w-14 h-14 object-cover rounded-full"
                         :src="'http://localhost/uploads/user/' + wallet?.picture"
                     />
-                    <div v-else class="flex mr-4 items-center justify-center text-left w-14 h-14 text-4xl rounded-full bg-yellow-300">
+                    <div
+                        v-else
+                        class="flex mr-2 items-center justify-center text-left w-14 h-14 text-2xl font-bold rounded-full text-yellow-700/50 bg-yellow-300"
+                    >
                         {{ wallet.name.slice(0, 1) }}
                     </div>
                     <div class="flex flex-col">
-                        <span class="text-lg font-latobold">{{ wallet.balance?.toLocaleString() }} {{ wallet.currency }}</span>
-                        <span class="text-sm">{{ wallet.name }}</span>
+                        <span class="font-bold">{{ wallet.balance?.toLocaleString() }} </span>
+                        <span class="text-sm text-slate-500">{{ wallet.name }} {{ wallet.currency }}</span>
                     </div>
                 </div>
 
-                <div class="flex items-center w-60 rounded-full border-2 border-white bg-white/50" @click="addWallet()">
-                    <div class="flex mr-4 items-center justify-center text-left w-14 h-14 text-4xl rounded-full bg-yellow-300">+</div>
-                    <div class="flex flex-col">
-                        <span class="text-sm">Добавить</span>
-                    </div>
+                <div class="flex items-center w-full rounded-full border-2 border-white bg-white/50" @click="addWallet()">
+                    <div class="flex mr-2 items-center justify-center text-white w-14 h-14 text-4xl rounded-full bg-teal-300">+</div>
+                    <span class="text-sm text-teal-500">Добавить</span>
                 </div>
             </div>
         </div>
 
-        <div class="p-5 v-bbgray">
-            <div class="flex justify-center text-lg font-latobold mb-4">КАТЕГОРИИ расходов/доходов</div>
-            <div class="grid grid-cols-4 gap-4">
-                <div v-for="group in groups" :key="group.id" class="flex flex-col rounded-md items-center border border-white">
-                    <span class="w-full text-center text-lg mb-2 bg-white/50 py-1">{{ group.name }}</span>
-                    <div v-for="category in group.categories" :key="category.id">
-                        <div class="flex">
-                            <span class="text-sm mr-2">{{ category.name }}</span>
-                            <span class="text-xs">del</span>
-                        </div>
-                    </div>
-                    <div class="grid grid-cols-5 items-center w-full p-4">
-                        <input class="col-span-4 rounded-sm" type="text" v-model="category_name" />
-                        <div
-                            class="bg-teal-400 text-white text-center text-sm rounded-sm cursor-pointer"
-                            @click="addCategory({ group_id: group.id, name: category_name })"
-                        >
-                            +
-                        </div>
-                    </div>
-                </div>
-
-                <div class="flex flex-col rounded-md items-center border border-white">
-                    <div class="grid grid-cols-5 items-center w-full p-4">
-                        <input class="col-span-4 rounded-sm" type="text" v-model="group_name" />
-                        <div class="bg-teal-400 text-white text-center text-sm rounded-sm cursor-pointer" @click="addGroup(group_name)">+</div>
-                    </div>
-                </div>
+        <div class="p-2">
+            <div class="text-lg text-center mb-4 font-light text-sky-800/30">ТРАНЗАКЦИИ</div>
+            <div class="grid grid-cols-5 text-xs text-slate-400">
+                <span>ДАТА</span>
+                <span>КАТЕГОРИЯ</span>
+                <span class="col-span-2">ОПИСАНИЕ</span>
+                <span class="text-right">СУММА</span>
             </div>
-        </div>
-
-        <div class="p-5 v-bbgray">
-            <div class="flex justify-center text-lg font-latobold mb-4">ТРАНЗАКЦИИ</div>
-            <div>
-                <div
-                    v-for="transaction in transactions.reverse()"
-                    :key="transaction.id"
-                    class="grid grid-cols-4 text-sm p-1 mb-px bg-white/30 hover:bg-white/50"
-                >
-                    <span>{{ select.category[transaction.category_id] }}</span>
-                    <span>{{ transaction.description }}</span>
-                    <span class="text-right">{{ transaction.sum }}</span>
-                </div>
+            <div v-for="transaction in transactions" :key="transaction.id" class="grid grid-cols-5 text-sm p-1 mb-px bg-white/30 hover:bg-white/50">
+                <span>{{ moment(transaction.create_at).format("DD.MM") }}</span>
+                <span>{{ select.category[transaction.category_id] }}</span>
+                <span class="col-span-2">{{ transaction.description }}</span>
+                <span class="text-right" :class="{ 'text-pink-500': transaction.sum < 0, 'text-teal-500': transaction.sum > 0 }">{{
+                    parseFloat(transaction.sum).toFixed(0)
+                }}</span>
             </div>
         </div>
     </div>
@@ -155,17 +131,56 @@
             </div>
         </div>
     </template>
+
+    <template v-if="popup == 'categories'">
+        <div
+            class="w-1/2 p-4 min-h-min h-4/5 fixed left-1/2 -translate-x-1/2 top-10 max-h-screen overflow-auto rounded z-50 bg-white shadow-lg max-sm:w-full"
+        >
+            <h3 class="text-center text-xl m-2">КАТЕГОРИИ расходов/доходов</h3>
+
+            <div class="grid grid-cols-4 gap-4 max-sm:grid-cols-1">
+                <div v-for="group in groups" :key="group.id" class="flex flex-col rounded-md items-center border border-sky-300">
+                    <span class="w-full text-center text-lg mb-2 bg-sky-100/50 py-1">{{ group.name }}</span>
+                    <div v-for="category in group.categories" :key="category.id">
+                        <div class="flex">
+                            <span class="text-sm mr-2">{{ category.name }}</span>
+                            <span class="text-xs text-pink-400">del</span>
+                        </div>
+                    </div>
+                    <div class="grid grid-cols-5 items-center w-full p-4">
+                        <input class="col-span-4 border border-slate-200 rounded-sm" type="text" v-model="category_name" />
+                        <div
+                            class="bg-teal-400 text-white text-center text-sm rounded-sm cursor-pointer"
+                            @click="addCategory({ group_id: group.id, name: category_name })"
+                        >
+                            +
+                        </div>
+                    </div>
+                </div>
+
+                <div class="flex flex-col rounded-md items-center border border-white">
+                    <div class="grid grid-cols-5 items-center w-full p-4">
+                        <input class="col-span-4 border border-slate-200 rounded-sm" type="text" v-model="group_name" />
+                        <div class="bg-teal-400 text-white text-center text-sm rounded-sm cursor-pointer" @click="addGroup(group_name)">+</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </template>
+
     <div v-if="popup" @click="closePopup()" class="fixed bg-sky-900 z-10 w-screen h-screen top-0 left-0 opacity-50" id="overlay"></div>
 </template>
 
 <script>
 import { mapActions, mapGetters } from "vuex";
+import moment from "moment";
 
 export default {
     name: "WalletPage",
 
     data() {
         return {
+            moment: moment,
             group_id: null,
             group_name: null,
             category_name: null,

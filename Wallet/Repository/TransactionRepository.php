@@ -16,7 +16,7 @@ class TransactionRepository
             $q->asArray();
         }
 
-        return $q->all();
+        return $q->orderBy('create_at DESC')->all();
     }
 
 }
