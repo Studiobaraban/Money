@@ -11,7 +11,7 @@ namespace app\Wallet\Entity;
  * @property string $category_id
  * @property string $description
  * @property float $sum
- * @property int $type              1 доход, 2 расход, 3 перевод, 4 коррекция
+ * @property int $type              1 доход, 2 расход, 3 перевод в кошелек, 4 перевод из кошелька, 5 коррекция
  * @property string $create_at
  * @property int $status
  *

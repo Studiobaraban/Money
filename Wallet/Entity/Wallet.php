@@ -3,7 +3,7 @@
 namespace app\Wallet\Entity;
 
 
-use yii\db\Transaction;
+use app\User\Entity\Account;
 
 /**
  * This is the model class for table "wallet".
@@ -49,5 +49,10 @@ class Wallet extends \yii\db\ActiveRecord
     public function getTransactions()
     {
         return $this->hasMany(Transaction::class, ['wallet_id' => 'id']);
+    }
+
+    public function getAccount()
+    {
+        return $this->hasOne(Account::class, ['id' => 'account_id']);
     }
 }

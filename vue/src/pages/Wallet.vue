@@ -1,7 +1,7 @@
 <template>
     <div class="min-h-full">
         <div class="absolute top-4 left-4">
-            <div @click="popup = 'categories'" class="text-sky-400 text-xs font-bold">+ КАТЕГОРИИ</div>
+            <div @click="popup = 'categories'" class="text-teal-400 text-xs font-bold">+ КАТЕГОРИИ</div>
         </div>
 
         <!-- <div class="absolute top-4 right-4">
@@ -14,15 +14,24 @@
         <div class="p-2 pt-10">
             <div class="flex justify-center gap-2">
                 <div v-for="user in users" :key="user.id" class="flex items-center w-60 rounded-full border-2 border-white bg-white/50">
-                    <img v-if="user?.picture" class="w-14 h-14 rounded-full mr-4" :src="'http://localhost/uploads/user/' + user?.picture" />
-                    <img v-else class="w-14 h-14 mr-4" src="http://localhost/uploads/user/u0.png" />
+                    <img
+                        v-if="user?.picture"
+                        class="w-14 h-14 rounded-full mr-4"
+                        :src="'https://moneyapi.studiobaraban.ru/uploads/user/' + user?.picture"
+                    />
+                    <img v-else class="w-14 h-14 mr-4" src="https://moneyapi.studiobaraban.ru/uploads/user/u0.png" />
                     <span>{{ user.name }}<br />{{ user.secondname }}</span>
                 </div>
             </div>
         </div>
 
+        <div class="text-3xl text-center mt-4 font-bold text-teal-600">
+            {{ parseInt(total).toLocaleString() }}
+            <span class="block text-sm text-slate-500 text-center font-light">ИТОГО</span>
+        </div>
+
         <div class="p-2">
-            <div class="flex justify-center items-center text-lg my-4 font-light text-sky-800/30">
+            <div class="flex justify-center items-center text-lg my-4 font-light text-slate-500">
                 КОШЕЛЬКИ
                 <div class="flex justify-center items-center w-5 h-5 ml-2 text-white bg-teal-400 rounded-full" @click="addWallet()">+</div>
             </div>
@@ -31,7 +40,7 @@
                     <img
                         v-if="wallet?.picture"
                         class="w-14 h-14 object-cover rounded-full"
-                        :src="'http://localhost/uploads/user/' + wallet?.picture"
+                        :src="'https://moneyapi.studiobaraban.ru/uploads/user/' + wallet?.picture"
                     />
                     <div
                         v-else
@@ -50,24 +59,32 @@
         <div class="mt-2 max-sm:hidden"><InOutGraf /></div>
 
         <div class="p-2">
-            <div class="flex items-center justify-center text-lg text-center my-4 font-light text-sky-800/30">
+            <div class="flex items-center justify-center text-lg text-center my-4 font-light text-slate-500">
                 <div class="flex justify-center items-center w-5 h-5 mr-2 text-white bg-teal-400 rounded-full" @click="outcome(1)">+</div>
                 ТРАНЗАКЦИИ
                 <div class="flex justify-center items-center w-5 h-5 ml-2 text-white bg-red-400 rounded-full" @click="outcome(2)">-</div>
             </div>
-            <div class="grid grid-cols-5 text-xs text-slate-400 px-1">
+            <!-- <div class="grid grid-cols-5 text-xs text-slate-400 px-1">
                 <span>ДАТА</span>
                 <span>КАТЕГОРИЯ</span>
                 <span class="col-span-2">ОПИСАНИЕ</span>
                 <span class="text-right">СУММА</span>
-            </div>
+            </div> -->
 
-            <div v-for="transaction in transactions" :key="transaction.id" class="grid grid-cols-5 text-sm p-1 mb-px bg-white/30 hover:bg-white/50">
-                <span>{{ moment(transaction.create_at).format("DD.MM") }}</span>
-                <span>{{ select.category[transaction.category_id] }}</span>
-                <span class="col-span-2">{{ transaction.description }}</span>
-                <span class="text-right" :class="{ 'text-pink-500': transaction.sum < 0, 'text-teal-500': transaction.sum > 0 }">
+            <div
+                v-for="transaction in transactions"
+                :key="transaction.id"
+                class="grid grid-cols-8 items-center text-sm p-1 mb-px bg-white/30 hover:bg-white/50"
+            >
+                <span class="text-slate-400">{{ moment(transaction.create_at).format("DD.MM") }}</span>
+                <img class="w-6 h-6 rounded-full" :src="'https://moneyapi.studiobaraban.ru/uploads/user/u' + transaction.wallet_user + '.jpg'" />
+                <div class="col-span-4 leading-4">
+                    <span class="block text-slate-400 lowercase text-xs">{{ select.category[transaction.category_id] }}</span>
+                    <span>{{ transaction.description }}</span>
+                </div>
+                <span class="col-span-2 text-right" :class="{ 'text-pink-500': transaction.sum < 0, 'text-teal-500': transaction.sum > 0 }">
                     {{ Number(transaction.sum).toLocaleString() }}
+                    <span class="text-slate-400">{{ transaction.currency }}</span>
                 </span>
             </div>
         </div>
@@ -94,7 +111,7 @@
                         placeholder="Категория"
                     />
                     <div v-if="cats">
-                        <div v-for="cat in cats.slice(0, 4)" :key="cat.id" class="text-sm py-1 px-2 cursor-pointer hover:bg-sky-100">
+                        <div v-for="cat in cats.slice(0, 4)" :key="cat.id" class="text-sm py-1 px-2 cursor-pointer hover:bg-teal-100">
                             <span @click="selectCat(cat)">{{ cat.name }}</span>
                         </div>
                     </div>
@@ -111,7 +128,7 @@
                         placeholder="Кошелек"
                     />
                     <div v-if="wals">
-                        <div v-for="wal in wals.slice(0, 4)" :key="wal.id" class="flex text-sm py-1 px-2 cursor-pointer hover:bg-sky-100">
+                        <div v-for="wal in wals.slice(0, 4)" :key="wal.id" class="flex text-sm py-1 px-2 cursor-pointer hover:bg-teal-100">
                             <span @click="selectWallet(wal)">{{ wal.name }} {{ wal.balance }}</span>
                         </div>
                     </div>
@@ -143,8 +160,8 @@
             <h3 class="text-center text-xl m-2">КАТЕГОРИИ расходов/доходов</h3>
 
             <div class="grid grid-cols-2 gap-4 max-sm:grid-cols-1">
-                <div v-for="group in groups" :key="group.id" class="flex flex-col rounded-md items-center border border-sky-300">
-                    <span class="w-full text-center text-lg mb-2 bg-sky-100/50 py-1">{{ group.name }}</span>
+                <div v-for="group in groups" :key="group.id" class="flex flex-col rounded-md items-center border border-teal-300">
+                    <span class="w-full text-center text-lg mb-2 bg-teal-100/50 py-1">{{ group.name }}</span>
                     <div v-for="category in group.categories" :key="category.id">
                         <div class="flex">
                             <span class="text-sm mr-2">{{ category.name }}</span>
@@ -172,7 +189,7 @@
         </div>
     </template>
 
-    <div v-if="popup" @click="closePopup()" class="fixed bg-sky-900 z-10 w-screen h-screen top-0 left-0 opacity-50" id="overlay"></div>
+    <div v-if="popup" @click="closePopup()" class="fixed bg-teal-900 z-10 w-screen h-screen top-0 left-0 opacity-50" id="overlay"></div>
 </template>
 
 <script>
@@ -201,7 +218,7 @@ export default {
     },
 
     computed: {
-        ...mapGetters(["s", "select", "account", "users", "wallets", "groups", "categories", "transactions"]),
+        ...mapGetters(["s", "select", "account", "users", "wallets", "groups", "categories", "transactions", "total"]),
     },
 
     methods: {
