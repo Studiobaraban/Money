@@ -9,6 +9,7 @@ use yii\db\Transaction;
  * This is the model class for table "wallet".
  *
  * @property int $id
+ * @property int $account_id
  * @property int $user_id
  * @property string $name
  * @property string $description
@@ -29,8 +30,8 @@ class Wallet extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['user_id', 'name'], 'required'],
-            [['id', 'user_id', 'status'], 'integer'],
+            [['account_id', 'user_id', 'name'], 'required'],
+            [['id', 'account_id', 'user_id', 'status'], 'integer'],
             [['name', 'description', 'currency'], 'string'],
             [['balance'], 'number']
         ];

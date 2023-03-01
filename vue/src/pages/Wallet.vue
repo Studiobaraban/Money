@@ -4,12 +4,12 @@
             <div @click="popup = 'categories'" class="text-sky-400 text-xs font-bold">+ КАТЕГОРИИ</div>
         </div>
 
-        <div class="absolute top-4 right-4">
+        <!-- <div class="absolute top-4 right-4">
             <div class="flex text-xs gap-4">
                 <div @click="outcome(1)" class="text-teal-400 font-bold">+ ДОХОД</div>
                 <div @click="outcome(2)" class="text-pink-400 font-bold">- РАСХОД</div>
             </div>
-        </div>
+        </div> -->
 
         <div class="p-2 pt-10">
             <div class="flex justify-center gap-2">
@@ -22,9 +22,12 @@
         </div>
 
         <div class="p-2">
-            <div class="flex justify-center text-lg mb-4 font-light text-sky-800/30">КОШЕЛЬКИ</div>
+            <div class="flex justify-center items-center text-lg my-4 font-light text-sky-800/30">
+                КОШЕЛЬКИ
+                <div class="flex justify-center items-center w-5 h-5 ml-2 text-white bg-teal-400 rounded-full" @click="addWallet()">+</div>
+            </div>
             <div class="grid grid-cols-4 gap-4 max-sm:grid-cols-2">
-                <div v-for="wallet in wallets" :key="wallet.id" class="flex items-center w-full rounded-full border-2 border-white bg-white/50">
+                <div v-for="wallet in wallets" :key="wallet.id" class="flex items-center w-full h-15 rounded-full border-2 border-white bg-white/50">
                     <img
                         v-if="wallet?.picture"
                         class="w-14 h-14 object-cover rounded-full"
@@ -37,33 +40,35 @@
                         {{ wallet.name.slice(0, 1) }}
                     </div>
                     <div class="flex flex-col">
-                        <span class="font-bold">{{ wallet.balance?.toLocaleString() }} </span>
+                        <span class="font-bold">{{ Number(wallet.balance)?.toLocaleString() }} </span>
                         <span class="text-sm text-slate-500">{{ wallet.name }} {{ wallet.currency }}</span>
                     </div>
-                </div>
-
-                <div class="flex items-center w-full rounded-full border-2 border-white bg-white/50" @click="addWallet()">
-                    <div class="flex mr-2 items-center justify-center text-white w-14 h-14 text-4xl rounded-full bg-teal-300">+</div>
-                    <span class="text-sm text-teal-500">Добавить</span>
                 </div>
             </div>
         </div>
 
+        <div class="mt-2 max-sm:hidden"><InOutGraf /></div>
+
         <div class="p-2">
-            <div class="text-lg text-center mb-4 font-light text-sky-800/30">ТРАНЗАКЦИИ</div>
+            <div class="flex items-center justify-center text-lg text-center my-4 font-light text-sky-800/30">
+                <div class="flex justify-center items-center w-5 h-5 mr-2 text-white bg-teal-400 rounded-full" @click="outcome(1)">+</div>
+                ТРАНЗАКЦИИ
+                <div class="flex justify-center items-center w-5 h-5 ml-2 text-white bg-red-400 rounded-full" @click="outcome(2)">-</div>
+            </div>
             <div class="grid grid-cols-5 text-xs text-slate-400 px-1">
                 <span>ДАТА</span>
                 <span>КАТЕГОРИЯ</span>
                 <span class="col-span-2">ОПИСАНИЕ</span>
                 <span class="text-right">СУММА</span>
             </div>
+
             <div v-for="transaction in transactions" :key="transaction.id" class="grid grid-cols-5 text-sm p-1 mb-px bg-white/30 hover:bg-white/50">
                 <span>{{ moment(transaction.create_at).format("DD.MM") }}</span>
                 <span>{{ select.category[transaction.category_id] }}</span>
                 <span class="col-span-2">{{ transaction.description }}</span>
-                <span class="text-right" :class="{ 'text-pink-500': transaction.sum < 0, 'text-teal-500': transaction.sum > 0 }">{{
-                    parseFloat(transaction.sum).toFixed(0)
-                }}</span>
+                <span class="text-right" :class="{ 'text-pink-500': transaction.sum < 0, 'text-teal-500': transaction.sum > 0 }">
+                    {{ Number(transaction.sum).toLocaleString() }}
+                </span>
             </div>
         </div>
     </div>
@@ -173,9 +178,12 @@
 <script>
 import { mapActions, mapGetters } from "vuex";
 import moment from "moment";
+import InOutGraf from "../components/InOutGraf.vue";
 
 export default {
     name: "WalletPage",
+
+    components: { InOutGraf },
 
     data() {
         return {

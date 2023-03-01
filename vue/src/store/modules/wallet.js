@@ -157,6 +157,7 @@ export default {
             formData.append("wallet_id", data.wallet.id);
             if (data.type == 2) data.sum = data.sum * -1;
             formData.append("sum", data.sum);
+            formData.append("type", data.type);
             formData.append("description", data.name);
             API.POST("account/add-transaction", formData).then((res) => {
                 console.log("transactions", res.data.transactions);
