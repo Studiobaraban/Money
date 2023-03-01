@@ -2,17 +2,18 @@
 
 namespace app\controllers;
 
-use app\Wallet\Factory\CategoryFactory;
-use app\Wallet\Factory\GroupFactory;
-use app\Wallet\Factory\TransactionFactory;
-use app\Wallet\Factory\WalletFactory;
-use app\Wallet\Repository\CategoryRepository;
-use app\Wallet\Repository\GroupRepository;
-use app\Wallet\Repository\WalletRepository;
 use Yii;
 
 use app\User\Entity\User;
 use app\Wallet\Entity\Wallet;
+
+use app\Wallet\Factory\CategoryFactory;
+use app\Wallet\Factory\GroupFactory;
+use app\Wallet\Factory\TransactionFactory;
+use app\Wallet\Factory\WalletFactory;
+
+use app\Wallet\Repository\GroupRepository;
+use app\Wallet\Repository\WalletRepository;
 
 use app\User\Repository\AccountRepository;
 use app\Wallet\Repository\TransactionRepository;
@@ -45,7 +46,7 @@ class AccountController extends Controller
     public function actionAll()
     {
         $accountR = new AccountRepository();
-        $account = $accountR->one(1, true);
+        $account = $accountR->one($this->user->account_id, true);
 
         $groupR = new GroupRepository();
         $groups = $groupR->list($this->user->account_id, true);

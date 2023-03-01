@@ -1,7 +1,5 @@
 <template>
-    <!-- bg-slate-100 -->
-    <!-- <div class="flex min-h-full bg-gradient-radial from-cyan-200 via-purple-200 to-sky-200 max-xl:flex-col"> -->
-    <div class="flex min-h-full bg-gradient-to-tr from-cyan-200 via-purple-100/0 to-sky-200 max-xl:flex-col">
+    <div class="flex min-h-full">
         <div class="w-96 my-4 rounded max-l:mx-auto">
             <div class="p-5 v-bbgray">
                 <h2 class="uppercase text-center text-xl font-latobold">Профиль</h2>
@@ -9,14 +7,14 @@
 
             <div class="p-5 v-bbgray">
                 <div class="flex text-base text-zinc-800 font-latobold flex-col items-center">
-                    <div class="w-48 h-48 my-5 mx-auto rounded-full bg-sky-500 overflow-hidden relative">
+                    <div class="w-48 h-48 my-5 mx-auto rounded-full bg-teal-500 overflow-hidden relative">
                         <span class="w-full h-full group">
                             <input
                                 type="file"
                                 id="avatar"
                                 class="absolute invisible opacity-0"
                                 multiple
-                                @change="uploadImg({ e: $event, type: 'author', id: author.user_id })"
+                                @change="uploadImg({ e: $event, type: 'profile', id: profile.user_id })"
                             />
                             <label
                                 for="avatar"
@@ -27,37 +25,32 @@
                                 </svg>
                             </label>
                             <img
-                                v-if="author?.picture"
+                                v-if="profile?.picture"
                                 class="w-full h-full object-cover"
-                                :src="'https://api.botteach.me/users/mini/' + author?.picture"
+                                :src="'https://moneyapi.studiobaraban.ru/uploads/user/' + profile?.picture"
                             />
-                            <img v-else class="w-full h-full object-cover" src="https://api.botteach.me/users/mini/u0.png" />
+                            <img v-else class="w-full h-full object-cover" src="https://moneyapi.studiobaraban.ru/uploads/user/u0.png" />
                         </span>
                     </div>
 
-                    {{ author.name }} {{ author.secondname }}
+                    {{ profile?.name }} {{ profile?.secondname }}
                 </div>
                 <div class="flex">
-                    <!-- <a class="mx-auto mt-4 v-btn bg-sky-500 hover:bg-sky-400 transition-colors duration-150" @click="editProfile">
+                    <!-- <a class="mx-auto mt-4 v-btn bg-teal-500 hover:bg-teal-400 transition-colors duration-150" @click="editProfile">
                         <svg class="fill-white w-16px h-16px mr-3">
                             <use xlink:href="@/assets/i.svg#ico-edit"></use>
                         </svg>
                         <span class="v-btn_text">РЕДАКТИРОВАТЬ</span>
                     </a> -->
-                    <a class="mx-auto mt-4 v-btn bg-rose-500 hover:bg-rose-400 transition-colors duration-150" @click="logout()">
-                        <span class="v-btn_text">ВЫХОД</span>
+                    <a
+                        class="mx-auto mt-4 v-btn py-2 px-4 cursor-pointer rounded bg-rose-500 hover:bg-rose-400 transition-colors duration-150"
+                        @click="logout()"
+                    >
+                        <span class="text-white">ВЫХОД</span>
                     </a>
                 </div>
             </div>
         </div>
-
-        <!-- <div class="flex flex-col ml-4 mt-4 flex-1">
-            <div class="bg-white rounded mb-4 flex flex-wrap">
-                <div class="w-full p-5 v-bbgray">
-                    <h2 class="uppercase text-lg font-latobold">Token</h2>
-                </div>
-            </div>
-        </div> -->
     </div>
 </template>
 
@@ -68,7 +61,7 @@ export default {
     name: "ProfilePage",
 
     computed: {
-        ...mapGetters(["s", "author", "messages"]),
+        ...mapGetters(["s", "profile"]),
     },
 
     methods: {

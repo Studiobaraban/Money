@@ -1,3 +1,3 @@
-import BotMenu from "@/components/BotMenu";
+import NavMenu from "@/components/NavMenu";
 
-export default [BotMenu];
+export default [NavMenu];

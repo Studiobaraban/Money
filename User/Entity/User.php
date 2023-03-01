@@ -34,7 +34,7 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
     public function rules()
     {
         return [
-            [['account_id', 'username', 'auth_key', 'password_hash'], 'required'],
+            [['account_id', 'username', 'password_hash'], 'required'],
             [['account_id', 'status', 'created_at', 'updated_at'], 'integer'],
             [['username', 'auth_key'], 'string', 'max' => 32],
             [['roles', 'token', 'password_hash', 'password_reset_token', 'email'], 'string', 'max' => 255],
@@ -44,7 +44,7 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
 
     public static function findByHeaders($headers)
     {
-        return User::findOne(['id' => 7]);
+//        return User::findOne(['id' => 7]);
 
         $auth = $headers->get('Authorization');
         if (empty($auth)) {

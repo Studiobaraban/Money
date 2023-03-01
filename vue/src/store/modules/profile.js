@@ -4,8 +4,8 @@ import router from "@/router/router";
 
 export default {
     state: {
-        menu: [],
-        profile: [],
+        menu: {},
+        profile: {},
     },
 
     mutations: {
@@ -23,18 +23,18 @@ export default {
             let formData = new FormData();
             formData.append("username", data.username);
             formData.append("password", data.password);
-            axios.post("localhost/profile/login", formData).then((res) => {
+            axios.post("https://moneyapi.studiobaraban.ru/site/login", formData).then((res) => {
                 console.log(res.data);
                 if (res.data && res.data.token) {
                     localStorage.setItem("AUTH", res.data.token);
                     ctx.commit("profile", res.data.profile);
                     ctx.commit("menu", res.data.menu);
-                    router.push("/profile");
+                    router.push("/wallet");
                 }
             });
         },
 
-        Logout(ctx) {
+        logout(ctx) {
             localStorage.removeItem("AUTH");
             localStorage.removeItem("profile");
             ctx.commit("profile", null);
@@ -43,8 +43,8 @@ export default {
         },
 
         getProfile(ctx) {
-            console.log("getProfile");
             API.GET("profile/profile").then((res) => {
+                console.log("getProfile", res.data);
                 if (res.data.profile) {
                     ctx.commit("profile", res.data.profile);
                     ctx.commit("menu", res.data.menu);

@@ -1,5 +1,5 @@
 <template>
-    <div class="min-h-full bg-gradient-to-tr from-cyan-200 via-cyan-100/50 to-sky-200 max-xl:flex-col">
+    <div class="min-h-full">
         <div class="absolute top-4 left-4">
             <div @click="popup = 'categories'" class="text-sky-400 text-xs font-bold">+ КАТЕГОРИИ</div>
         </div>
@@ -12,7 +12,6 @@
         </div>
 
         <div class="p-2 pt-10">
-            <!-- <div class="flex justify-center text-lg font-bold mb-4">ПОЛЬЗОВАТЕЛИ</div> -->
             <div class="flex justify-center gap-2">
                 <div v-for="user in users" :key="user.id" class="flex items-center w-60 rounded-full border-2 border-white bg-white/50">
                     <img v-if="user?.picture" class="w-14 h-14 rounded-full mr-4" :src="'http://localhost/uploads/user/' + user?.picture" />
@@ -52,7 +51,7 @@
 
         <div class="p-2">
             <div class="text-lg text-center mb-4 font-light text-sky-800/30">ТРАНЗАКЦИИ</div>
-            <div class="grid grid-cols-5 text-xs text-slate-400">
+            <div class="grid grid-cols-5 text-xs text-slate-400 px-1">
                 <span>ДАТА</span>
                 <span>КАТЕГОРИЯ</span>
                 <span class="col-span-2">ОПИСАНИЕ</span>
@@ -138,7 +137,7 @@
         >
             <h3 class="text-center text-xl m-2">КАТЕГОРИИ расходов/доходов</h3>
 
-            <div class="grid grid-cols-4 gap-4 max-sm:grid-cols-1">
+            <div class="grid grid-cols-2 gap-4 max-sm:grid-cols-1">
                 <div v-for="group in groups" :key="group.id" class="flex flex-col rounded-md items-center border border-sky-300">
                     <span class="w-full text-center text-lg mb-2 bg-sky-100/50 py-1">{{ group.name }}</span>
                     <div v-for="category in group.categories" :key="category.id">

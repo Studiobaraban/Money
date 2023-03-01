@@ -120,8 +120,9 @@ $config = [
     'as access' => [
         'class' => 'mdm\admin\components\AccessControl',
         'allowActions' => [
-            'site/*',
             'account/*',
+            'site/*',
+            'profile/*',
             'debug/*',
             'gii/*'
         ]
