@@ -24,6 +24,7 @@ export default {
             formData.append("username", data.username);
             formData.append("password", data.password);
             axios.post("https://moneyapi.studiobaraban.ru/site/login", formData).then((res) => {
+                // axios.post("http://localhost/site/login", formData).then((res) => {
                 console.log(res.data);
                 if (res.data && res.data.token) {
                     localStorage.setItem("AUTH", res.data.token);

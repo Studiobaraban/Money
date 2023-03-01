@@ -1,8 +1,8 @@
 <template>
-    <div class="flex h-screen min-h-screen">
-        <div class="w-1/2 bg-gradient-to-br from-green-300 to-teal-400 relative">
+    <div class="flex max-sm:flex-col h-screen min-h-screen bg-gradient-to-br from-green-300 to-teal-400">
+        <div class="w-1/2 relative max-sm:w-full max-sm:h-80">
             <svg
-                class="w-40 absolute top-1/2 left-1/2 -translate-x-20 -translate-y-64 fill-teal-700"
+                class="w-40 absolute top-1/2 left-1/2 -translate-x-20 -translate-y-64 fill-teal-700 max-sm:-translate-y-32"
                 enable-background="new 0 0 480.056 480.056"
                 viewBox="0 0 480.056 480.056"
                 xmlns="http://www.w3.org/2000/svg"
@@ -12,20 +12,18 @@
                 ></path>
             </svg>
 
-            <h1 class="w-48 block absolute top-1/2 left-1/2 -translate-x-24 -translate-y-24 text-5xl text-center text-white font-bold">
+            <h1
+                class="w-48 block absolute top-1/2 left-1/2 -translate-x-24 -translate-y-24 max-sm:translate-y-10 text-5xl text-center text-white font-bold"
+            >
                 MONEY
                 <span class="block font-light text-2xl">Save & Grow</span>
             </h1>
-            <p class="w-full absolute bottom-8 text-white text-xs text-center mt-24">© 2023</p>
+            <p class="w-full absolute bottom-8 text-white text-xs text-center mt-24 max-sm:hidden">© 2023</p>
         </div>
 
-        <div class="w-1/2 bg-white">
-            <div class="px-4 mt-8 mx-auto bg-white rounded-lg max-w-xl w-full">
+        <div class="w-1/2 bg-white max-sm:w-full max-sm:bg-transparent">
+            <div class="px-4 mt-8 mx-auto rounded-lg max-w-xl w-full">
                 <div class="v-bbgray p-5 text-center">
-                    <span class="mx-auto flex-cc profile_img w-16 h-16 bg-[#42b6f8] font-white before:w-16 before:h-16">
-                        <svg class="w-7 h-7 fill-white"><use xlink:href="@/assets/i.svg#nav-masters"></use></svg>
-                    </span>
-
                     <div class="flex justify-center text-lg uppercase font-bold">
                         <div class="text-gray-400 cursor-pointer mr-4" :class="{ '!text-teal-600': form == 'login' }" @click="form = 'login'">
                             Вход

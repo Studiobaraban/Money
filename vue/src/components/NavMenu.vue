@@ -1,12 +1,12 @@
 <template>
-    <div class="fixed z-50 w-full h-12 block md:hidden">
-        <a class="block w-10 h-10 my-1 mx-auto rounded-full overflow-hidden relative cursor-pointer" @click="$router.push('/profile')">
+    <div class="fixed w-full h-12 block md:hidden">
+        <!-- <a class="block w-10 h-10 my-1 mx-auto rounded-full overflow-hidden relative cursor-pointer" @click="$router.push('/profile')">
             <img
                 v-if="profile?.picture"
                 class="w-full h-full object-cover"
                 :src="'https://moneyapi.studiobaraban.ru/uploads/user/mini/' + profile?.picture"
             />
-        </a>
+        </a> -->
     </div>
 
     <div class="fixed flex-none w-32 h-screen hidden md:block">
