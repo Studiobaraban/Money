@@ -24,6 +24,8 @@ export default {
         transactions: [],
         transactionsF: [],
         transaction: {},
+
+        total: 0,
     },
 
     mutations: {
@@ -85,6 +87,10 @@ export default {
         setTransaction(state, transaction) {
             state.transaction = transaction;
         },
+
+        setTotal(state, total) {
+            state.total = total;
+        },
     },
 
     actions: {
@@ -103,6 +109,17 @@ export default {
                     group.categories.forEach((category) => (ctx.rootState.select.category[category.id] = category.name)); // для селекта
                 });
                 ctx.commit("setCategories", cats);
+
+                let total = 0;
+                res.data.wallets.forEach((wallet) => {
+                    if (wallet.currency == "₽") {
+                        total += wallet.balance;
+                    }
+                    if (wallet.currency == "R") {
+                        total += wallet.balance * 0.005;
+                    }
+                });
+                ctx.commit("setTotal", total);
             });
         },
 
@@ -309,6 +326,10 @@ export default {
         },
         transaction(state) {
             return state.transaction;
+        },
+
+        total(state) {
+            return state.total;
         },
     },
 };
