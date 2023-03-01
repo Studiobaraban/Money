@@ -68,10 +68,10 @@ class AccountController extends Controller
     public function actionAddWallet()
     {
         $walletF = new WalletFactory();
-        $walletF->create($this->user->id, 'Кошелек');
+        $walletF->create((int)$this->user->account_id, (int)$this->user->id, 'Кошелек');
 
         $walletR = new WalletRepository();
-        $wallets = $walletR->list($this->user->id, true);
+        $wallets = $walletR->account($this->user->account_id, true);
 
         return ['wallets' => $wallets];
     }
@@ -112,13 +112,13 @@ class AccountController extends Controller
     {
         $post = Yii::$app->getRequest()->post();
 
-        $wallet = Wallet::find()->where(['id' => $post['wallet_id'], 'user_id' => $this->user->id])->one();
+        $wallet = Wallet::find()->where(['id' => $post['wallet_id']])->one(); // , 'user_id' => $this->user->id
         if (empty($wallet)) {
             return null;
         }
 
         $transactionF = new TransactionFactory();
-        $transactionF->create($wallet, $post['category_id'], $post['sum'], $post['description']);
+        $transactionF->create($wallet, $post['category_id'], $post['sum'], (int)$post['type'], $post['description']);
 
         $transactionR = new TransactionRepository();
         $transactions = $transactionR->list(null, true);
