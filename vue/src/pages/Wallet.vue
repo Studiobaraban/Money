@@ -4,16 +4,15 @@
             <div @click="popup = 'categories'" class="text-teal-400 text-xs font-bold">+ КАТЕГОРИИ</div>
         </div>
 
-        <!-- <div class="absolute top-4 right-4">
-            <div class="flex text-xs gap-4">
-                <div @click="outcome(1)" class="text-teal-400 font-bold">+ ДОХОД</div>
-                <div @click="outcome(2)" class="text-pink-400 font-bold">- РАСХОД</div>
-            </div>
-        </div> -->
-
         <div class="p-2 pt-10">
             <div class="flex justify-center gap-2">
-                <div v-for="user in users" :key="user.id" class="flex items-center w-60 rounded-full border-2 border-white bg-white/50">
+                <div
+                    v-for="user in users"
+                    :key="user.id"
+                    @click="pickUser(user)"
+                    class="flex items-center w-60 rounded-full opacity-50 border-2 border-white bg-white/50"
+                    :class="{ '!opacity-100': s.user_id > 0 && user.id == s.user_id }"
+                >
                     <img
                         v-if="user?.picture"
                         class="w-14 h-14 rounded-full mr-4"
@@ -25,13 +24,13 @@
             </div>
         </div>
 
-        <div class="text-3xl text-center mt-4 font-bold text-teal-600">
-            {{ parseInt(total).toLocaleString() }}
-            <span class="block text-sm text-slate-500 text-center font-light">ИТОГО</span>
+        <div class="text-3xl text-center mt-4 font-bold text-teal-800/80">
+            {{ parseInt(calcTotal / 75).toLocaleString() }} $
+            <span class="block text-sm text-teal-800/80 text-center font-light">{{ calcTotal.toLocaleString() }} ₽</span>
         </div>
 
         <div class="p-2">
-            <div class="flex justify-center items-center text-lg my-4 font-light text-slate-500">
+            <div class="flex justify-center items-center text-lg my-4 font-light text-teal-800/80">
                 КОШЕЛЬКИ
                 <div class="flex justify-center items-center w-5 h-5 ml-2 text-white bg-teal-400 rounded-full" @click="addWallet()">+</div>
             </div>
@@ -59,7 +58,7 @@
         <div class="mt-2 max-sm:hidden"><InOutGraf /></div>
 
         <div class="p-2">
-            <div class="flex items-center justify-center text-lg text-center my-4 font-light text-slate-500">
+            <div class="flex items-center justify-center text-lg text-center my-4 font-light text-teal-800/80">
                 <div class="flex justify-center items-center w-5 h-5 mr-2 text-white bg-teal-400 rounded-full" @click="outcome(1)">+</div>
                 ТРАНЗАКЦИИ
                 <div class="flex justify-center items-center w-5 h-5 ml-2 text-white bg-red-400 rounded-full" @click="outcome(2)">-</div>
@@ -218,11 +217,24 @@ export default {
     },
 
     computed: {
-        ...mapGetters(["s", "select", "account", "users", "wallets", "groups", "categories", "transactions", "total"]),
+        ...mapGetters(["s", "select", "account", "users", "wallets", "groups", "categories", "transactions"]),
+
+        calcTotal() {
+            let total = 0;
+            this.wallets.forEach((wallet) => {
+                if (wallet.currency == "₽") {
+                    total += parseFloat(wallet.balance);
+                }
+                if (wallet.currency == "₹") {
+                    total += parseFloat(wallet.balance) * 0.005;
+                }
+            });
+            return parseInt(total);
+        },
     },
 
     methods: {
-        ...mapActions(["getAccount", "addWallet", "addGroup", "addCategory", "addTransaction"]),
+        ...mapActions(["getAccount", "addWallet", "addGroup", "addCategory", "addTransaction", "pickUser"]),
 
         findCategory() {
             this.cats = this.categories.filter((item) => item.name.toLowerCase().indexOf(this.text_category.toLowerCase()) !== -1);

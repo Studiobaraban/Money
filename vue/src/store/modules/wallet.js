@@ -24,8 +24,6 @@ export default {
         transactions: [],
         transactionsF: [],
         transaction: {},
-
-        total: 0,
     },
 
     mutations: {
@@ -109,17 +107,6 @@ export default {
                     group.categories.forEach((category) => (ctx.rootState.select.category[category.id] = category.name)); // для селекта
                 });
                 ctx.commit("setCategories", cats);
-
-                let total = 0;
-                res.data.wallets.forEach((wallet) => {
-                    if (wallet.currency == "₽") {
-                        total += wallet.balance;
-                    }
-                    if (wallet.currency == "R") {
-                        total += wallet.balance * 0.005;
-                    }
-                });
-                ctx.commit("setTotal", total);
             });
         },
 
@@ -182,109 +169,31 @@ export default {
             });
         },
 
-        findOrder(ctx, s) {
-            if (!ctx.state.transactions || !ctx.state.deals) {
-                return null;
+        pickUser(ctx, user) {
+            if (ctx.state.user?.id == user.id) {
+                ctx.dispatch("unpickUser");
+                return;
             }
+            ctx.commit("setUser", user);
+            ctx.rootState.s.user_id = user.id;
+            ctx.commit("setSettings", ctx.rootState.s);
 
-            let orderList = ctx.state.transactions;
+            let walletsF = ctx.state.wallets.filter((item) => item.user_id == user.id);
+            ctx.commit("setWalletsF", walletsF);
 
-            if (s.findme != "" && s.findme != undefined) {
-                orderList = orderList.filter(
-                    (item) => parseInt(item.id) == parseInt(s.findme.toLowerCase()) || parseInt(item.level) == parseInt(s.findme.toLowerCase())
-                    // || parseInt(item.deal_id) == parseInt(s.findme.toLowerCase())
-                );
-            }
+            let w_ids = [];
+            walletsF.forEach((item) => w_ids.push(item.id));
 
-            if (s.type != "" && s.type != undefined) {
-                orderList = orderList.filter((item) => parseInt(item.type) == parseInt(s.type));
-            }
+            let transactionsF = ctx.state.transactions.filter((item) => w_ids.includes(item.wallet_id));
+            ctx.commit("setTransactionsF", transactionsF);
+        },
 
-            if (s.start != "" && s.start != undefined) {
-                orderList = orderList.filter((item) => item.done_at >= s.start + " 00:00:00");
-            }
-
-            if (s.end != "" && s.end != undefined) {
-                orderList = orderList.filter((item) => item.done_at <= s.end + " 23:59:59");
-            }
-
-            if (s.status != "" && s.status != undefined) {
-                orderList = orderList.filter((item) => parseInt(item.status) == parseInt(s.status));
-            }
-
-            let dealList = ctx.state.deals;
-
-            if (s.findme != "" && s.findme != undefined) {
-                dealList = dealList.filter(
-                    (item) => parseInt(item.id) == parseInt(s.findme.toLowerCase()) || parseInt(item.level) == parseInt(s.findme.toLowerCase())
-                );
-            }
-
-            if (s.start != "" && s.start != undefined) {
-                dealList = dealList.filter((item) => {
-                    let done = null;
-                    let date = null;
-                    if (item.status == 7) {
-                        done = item.done_at >= s.start + " 00:00:00";
-                    } else {
-                        date = item.date >= s.start + " 00:00:00";
-                    }
-                    if (done || date) {
-                        return true;
-                    }
-                    return false;
-                });
-            }
-
-            if (s.end != "" && s.end != undefined) {
-                dealList = dealList.filter((item) => {
-                    let done = null;
-                    let date = null;
-                    if (item.status == 7) {
-                        done = item.done_at <= s.end + " 23:59:59";
-                    } else {
-                        date = item.date <= s.end + " 23:59:59";
-                    }
-                    if (done || date) {
-                        return true;
-                    }
-                    return false;
-                });
-            }
-
-            if (s.status != "" && s.status != undefined) {
-                dealList = dealList.filter((item) => {
-                    if (parseInt(s.status) == 3) {
-                        return parseInt(item.status) == 2;
-                    }
-                    return false;
-                });
-            }
-
-            s.clear = true;
-
-            // list = list.filter((item) => {
-            //     console.log("id", item.id);
-
-            //     let id = null;
-            //     let level = null;
-            //     let deal_id = null;
-
-            //     id = item.id.indexOf(s.findme.toLowerCase()) !== -1;
-
-            //     level = item.level.indexOf(s.findme.toLowerCase()) !== -1;
-
-            //     deal_id = item.deal_id.indexOf(s.findme.toLowerCase()) !== -1;
-
-            //     if (id || level || deal_id) {
-            //         return true;
-            //     }
-            //     return false;
-            // });
-
-            ctx.commit("setTransactionsF", orderList);
-            ctx.commit("setDealsF", dealList);
-            ctx.dispatch("setSettings", s);
+        unpickUser(ctx) {
+            ctx.commit("setUser", null);
+            ctx.rootState.s.user_id = null;
+            ctx.commit("setSettings", ctx.rootState.s);
+            ctx.commit("setWalletsF", ctx.state.wallets);
+            ctx.commit("setTransactionsF", ctx.state.transactions);
         },
     },
 
@@ -326,10 +235,6 @@ export default {
         },
         transaction(state) {
             return state.transaction;
-        },
-
-        total(state) {
-            return state.total;
         },
     },
 };

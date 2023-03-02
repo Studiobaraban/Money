@@ -23,6 +23,7 @@ export default createStore({
         },
 
         s: {
+            user_id: null,
             status: null,
             findme: null,
             category: null,
@@ -63,6 +64,7 @@ export default createStore({
         clearSettings(ctx) {
             localStorage.removeItem("s");
             let s = {
+                user_id: null,
                 status: null,
                 findme: null,
                 category: null,
