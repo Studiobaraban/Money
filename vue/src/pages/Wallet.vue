@@ -10,8 +10,8 @@
                     v-for="user in users"
                     :key="user.id"
                     @click="pickUser(user)"
-                    class="flex items-center w-60 rounded-full opacity-50 border-2 border-white bg-white/50"
-                    :class="{ '!opacity-100': s.user_id > 0 && user.id == s.user_id }"
+                    class="flex items-center w-60 rounded-full border-2 border-white bg-white/50"
+                    :class="{ '!border-teal-400 bg-teal-300/50': user.id == s.user_id }"
                 >
                     <img
                         v-if="user?.picture"
@@ -35,7 +35,13 @@
                 <div class="flex justify-center items-center w-5 h-5 ml-2 text-white bg-teal-400 rounded-full" @click="addWallet()">+</div>
             </div>
             <div class="grid grid-cols-4 gap-4 max-sm:grid-cols-2">
-                <div v-for="wallet in wallets" :key="wallet.id" class="flex items-center w-full h-15 rounded-full border-2 border-white bg-white/50">
+                <div
+                    v-for="wallet in wallets"
+                    :key="wallet.id"
+                    @click="pickWallet(wallet)"
+                    class="flex items-center w-full h-15 rounded-full border-2 border-white bg-white/50"
+                    :class="{ '!border-teal-400 bg-teal-300/50': wallet.id == s.wallet_id }"
+                >
                     <img
                         v-if="wallet?.picture"
                         class="w-14 h-14 object-cover rounded-full"
@@ -234,7 +240,7 @@ export default {
     },
 
     methods: {
-        ...mapActions(["getAccount", "addWallet", "addGroup", "addCategory", "addTransaction", "pickUser"]),
+        ...mapActions(["getAccount", "addWallet", "addGroup", "addCategory", "addTransaction", "pickUser", "pickWallet"]),
 
         findCategory() {
             this.cats = this.categories.filter((item) => item.name.toLowerCase().indexOf(this.text_category.toLowerCase()) !== -1);

@@ -195,6 +195,26 @@ export default {
             ctx.commit("setWalletsF", ctx.state.wallets);
             ctx.commit("setTransactionsF", ctx.state.transactions);
         },
+
+        pickWallet(ctx, wallet) {
+            if (ctx.state.wallet?.id == wallet.id) {
+                ctx.dispatch("unpickWallet");
+                return;
+            }
+            ctx.commit("setWallet", wallet);
+            ctx.rootState.s.wallet_id = wallet.id;
+            ctx.commit("setSettings", ctx.rootState.s);
+
+            let transactionsF = ctx.state.transactions.filter((item) => item.wallet_id == wallet.id);
+            ctx.commit("setTransactionsF", transactionsF);
+        },
+
+        unpickWallet(ctx) {
+            ctx.commit("setWallet", null);
+            ctx.rootState.s.wallet_id = null;
+            ctx.commit("setSettings", ctx.rootState.s);
+            ctx.commit("setTransactionsF", ctx.state.transactions);
+        },
     },
 
     getters: {
