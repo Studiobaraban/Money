@@ -1,5 +1,5 @@
 <template>
-    <div class="justify-around items-center w-full h-10 hidden max-sm:flex">
+    <div class="justify-around items-center w-full h-12 hidden max-sm:flex">
         <a class="block w-8 h-8 my-1 rounded-full overflow-hidden relative cursor-pointer" @click="$router.push('/profile')">
             <img
                 v-if="profile?.picture"
@@ -15,7 +15,7 @@
                 <a @click="$router.push('/wallet')" class="cursor-pointer">Бизнес</a>
             </li>
             <li>
-                <a @click="$router.push('/wallet')" class="cursor-pointer">Инвестиции</a>
+                <a @click="$router.push('/invest')" class="cursor-pointer">Инвестиции</a>
             </li>
         </ul>
     </div>
@@ -39,7 +39,7 @@
                 <a @click="$router.push('/wallet')" class="w-full block py-5 cursor-pointer">Бизнес</a>
             </li>
             <li>
-                <a @click="$router.push('/wallet')" class="w-full block py-5 cursor-pointer">Инвестиции</a>
+                <a @click="$router.push('/invest')" class="w-full block py-5 cursor-pointer">Инвестиции</a>
             </li>
         </ul>
     </div>

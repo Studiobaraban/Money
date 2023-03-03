@@ -2,13 +2,15 @@ import { createStore } from "vuex";
 import API from "../services/api";
 import moment from "moment";
 
-import wallet from "./modules/wallet";
 import profile from "./modules/profile";
+import invest from "./modules/invest";
+import wallet from "./modules/wallet";
 
 export default createStore({
     modules: {
-        wallet,
         profile,
+        invest,
+        wallet,
     },
 
     state: {

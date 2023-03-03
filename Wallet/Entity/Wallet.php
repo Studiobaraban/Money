@@ -15,6 +15,7 @@ use app\User\Entity\Account;
  * @property string $description
  * @property string $currency
  * @property float $balance
+ * @property int $type              1 деньги, 2 бизнес, 3 инвестиции
  * @property int $status
  *
  */
@@ -31,7 +32,7 @@ class Wallet extends \yii\db\ActiveRecord
     {
         return [
             [['account_id', 'user_id', 'name'], 'required'],
-            [['id', 'account_id', 'user_id', 'status'], 'integer'],
+            [['id', 'account_id', 'user_id', 'type', 'status'], 'integer'],
             [['name', 'description', 'currency'], 'string'],
             [['balance'], 'number']
         ];

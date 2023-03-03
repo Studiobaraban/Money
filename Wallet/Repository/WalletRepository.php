@@ -7,9 +7,9 @@ use app\Wallet\Entity\Wallet;
 class WalletRepository extends \yii\db\ActiveRecord
 {
 
-    public function account($account_id, bool $asArray = false): ?array
+    public function account($account_id, int $type, bool $asArray = false): ?array
     {
-        $q = Wallet::find()->where(['account_id' => $account_id]);
+        $q = Wallet::find()->where(['account_id' => $account_id, 'type' => $type]);
 
         if (!empty($asArray)) {
             $q->asArray();

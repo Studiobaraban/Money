@@ -31,10 +31,12 @@
 
         <div class="p-2">
             <div class="flex justify-center items-center text-lg my-4 font-light text-teal-800/80">
+                <div @click="openWallets()" class="mr-2 fill-teal-500" :class="{ '-rotate-90': !w_opened }"><IcoBig name="down" :size="6" /></div>
                 КОШЕЛЬКИ
-                <div class="flex justify-center items-center w-5 h-5 ml-2 text-white bg-teal-400 rounded-full" @click="addWallet()">+</div>
+                <div @click="addWallet()" class="ml-2 text-teal-500"><IcoBig name="plus" :size="6" /></div>
+                <!-- <div class="flex justify-center items-center w-5 h-5 ml-2 text-white bg-teal-400 rounded-full">+</div> -->
             </div>
-            <div class="grid grid-cols-4 gap-4 max-sm:grid-cols-2">
+            <div v-if="w_opened" class="grid grid-cols-4 gap-4 max-sm:grid-cols-2">
                 <div
                     v-for="wallet in wallets"
                     :key="wallet.id"
@@ -65,9 +67,11 @@
 
         <div class="p-2">
             <div class="flex items-center justify-center text-lg text-center my-4 font-light text-teal-800/80">
-                <div class="flex justify-center items-center w-5 h-5 mr-2 text-white bg-teal-400 rounded-full" @click="outcome(1)">+</div>
+                <!-- <div class="flex justify-center items-center w-5 h-5 mr-2 text-white bg-teal-400 rounded-full" @click="outcome(1)">+</div> -->
+                <div @click="outcome(1)" class="mr-2 text-teal-500"><IcoBig name="plus" :size="6" /></div>
                 ТРАНЗАКЦИИ
-                <div class="flex justify-center items-center w-5 h-5 ml-2 text-white bg-red-400 rounded-full" @click="outcome(2)">-</div>
+                <div @click="outcome(2)" class="ml-2 text-pink-500"><IcoBig name="minus" :size="6" /></div>
+                <!-- <div class="flex justify-center items-center w-5 h-5 ml-2 text-white bg-red-400 rounded-full" @click="outcome(2)">-</div> -->
             </div>
             <!-- <div class="grid grid-cols-5 text-xs text-slate-400 px-1">
                 <span>ДАТА</span>
@@ -112,6 +116,7 @@
                         class="h-9 p-2 rounded-sm border border-slate-200"
                         type="text"
                         v-model="text_category"
+                        @click="findCategory()"
                         @input="findCategory()"
                         placeholder="Категория"
                     />
@@ -129,6 +134,7 @@
                         class="h-9 p-2 rounded-sm border border-slate-200 mb-px"
                         type="text"
                         v-model="text_wallet"
+                        @click="findWallet()"
                         @input="findWallet()"
                         placeholder="Кошелек"
                     />
@@ -219,6 +225,7 @@ export default {
             cats: [],
             wals: [],
             popup: false,
+            w_opened: true, // кошельки открыты
         };
     },
 
@@ -243,11 +250,19 @@ export default {
         ...mapActions(["getAccount", "addWallet", "addGroup", "addCategory", "addTransaction", "pickUser", "pickWallet"]),
 
         findCategory() {
-            this.cats = this.categories.filter((item) => item.name.toLowerCase().indexOf(this.text_category.toLowerCase()) !== -1);
+            if (this.text_category) {
+                this.cats = this.categories.filter((item) => item.name.toLowerCase().indexOf(this.text_category.toLowerCase()) !== -1);
+            } else {
+                this.cats = this.categories.slice(0, 4);
+            }
         },
 
         findWallet() {
-            this.wals = this.wallets.filter((item) => item.name.toLowerCase().indexOf(this.text_wallet.toLowerCase()) !== -1);
+            if (this.text_wallet) {
+                this.wals = this.wallets.filter((item) => item.name.toLowerCase().indexOf(this.text_wallet.toLowerCase()) !== -1);
+            } else {
+                this.wals = this.wallets.slice(0, 4);
+            }
         },
 
         deleteSelectedCategory() {
@@ -277,6 +292,14 @@ export default {
 
         closePopup() {
             this.popup = false;
+        },
+
+        openWallets() {
+            if (this.w_opened) {
+                this.w_opened = false;
+            } else {
+                this.w_opened = true;
+            }
         },
     },
 

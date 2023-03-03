@@ -2,8 +2,6 @@
 
 namespace app\controllers;
 
-use app\Wallet\Service\WalletRecountService;
-use Codeception\Step\Retry;
 use Yii;
 
 use app\User\Entity\User;
@@ -16,9 +14,10 @@ use app\Wallet\Factory\WalletFactory;
 
 use app\Wallet\Repository\GroupRepository;
 use app\Wallet\Repository\WalletRepository;
-
-use app\User\Repository\AccountRepository;
 use app\Wallet\Repository\TransactionRepository;
+use app\User\Repository\AccountRepository;
+
+use app\Wallet\Service\WalletRecountService;
 
 use yii\web\Controller;
 
@@ -59,7 +58,7 @@ class AccountController extends Controller
         WalletRecountService::handle($this->user->account_id, null);
 
         $walletR = new WalletRepository();
-        $wallets = $walletR->account($this->user->account_id, true);
+        $wallets = $walletR->account($this->user->account_id, 1, true);
 
         return [
             'account' => $account,
@@ -80,7 +79,7 @@ class AccountController extends Controller
         WalletRecountService::handle($this->user->account_id, null);
 
         $walletR = new WalletRepository();
-        $wallets = $walletR->account($this->user->account_id, true);
+        $wallets = $walletR->account($this->user->account_id, 1, true);
 
         return ['wallets' => $wallets];
     }
@@ -135,7 +134,7 @@ class AccountController extends Controller
         WalletRecountService::handle($this->user->account_id, null);
 
         $walletR = new WalletRepository();
-        $wallets = $walletR->account($this->user->account_id, true);
+        $wallets = $walletR->account($this->user->account_id, 1, true);
 
         return ['wallets' => $wallets, 'transactions' => $transactions];
     }
@@ -149,5 +148,15 @@ class AccountController extends Controller
         return $transactionR->list($wallet->id, true);
     }
 
+
+
+    // ИНВЕСТИЦИИ
+    public function actionInvestAll()
+    {
+        $walletR = new WalletRepository();
+        $invests = $walletR->account($this->user->account_id, 3, true);
+
+        return ['invests' => $invests];
+    }
 
 }

@@ -85,10 +85,6 @@ export default {
         setTransaction(state, transaction) {
             state.transaction = transaction;
         },
-
-        setTotal(state, total) {
-            state.total = total;
-        },
     },
 
     actions: {
