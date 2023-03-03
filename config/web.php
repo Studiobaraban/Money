@@ -113,6 +113,9 @@ $config = [
         'user' => [
             'class' => 'app\User\Module',
         ],
+        'invest' => [
+            'class' => 'app\Invest\Module',
+        ],
         'wallet' => [
             'class' => 'app\Wallet\Module',
         ],
@@ -140,7 +143,7 @@ if (YII_ENV_DEV) {
     $config['bootstrap'][] = 'gii';
     $config['modules']['gii'] = [
         'class' => 'yii\gii\Module',
-        //'allowedIPs' => ['127.0.0.1', '::1'],
+        'allowedIPs' => ['127.0.0.1', '*', '::1'],
     ];
 }
 
