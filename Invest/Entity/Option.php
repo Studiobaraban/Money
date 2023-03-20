@@ -9,6 +9,7 @@ namespace app\Invest\Entity;
  * @property int $account_id
  * @property int $user_id
  * @property int $wallet_id
+ * @property string $name
  * @property string $create_at
  * @property string $expiration_at
  * @property int $strike
@@ -33,6 +34,7 @@ class Option extends \yii\db\ActiveRecord
         return [
             [['account_id', 'user_id', 'wallet_id', 'create_at', 'expiration_at', 'strike', 'price', 'count', 'type'], 'required'],
             [['account_id', 'user_id', 'wallet_id', 'strike', 'price', 'count', 'type', 'status'], 'integer'],
+            [['name'], 'string'],
             [['create_at', 'expiration_at'], 'safe'],
             [['comm_exchange', 'comm_broker'], 'number'],
         ];

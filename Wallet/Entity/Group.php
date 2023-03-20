@@ -8,7 +8,7 @@ namespace app\Wallet\Entity;
  * @property int $id
  * @property int $account_id
  * @property string $name
- * @property string $description
+ * @property string $picture
  * @property int $status
  * @property int $del
  *
@@ -27,7 +27,7 @@ class Group extends \yii\db\ActiveRecord
         return [
             [['account_id', 'name'], 'required'],
             [['id', 'account_id', 'status', 'del'], 'integer'],
-            [['name', 'description'], 'string'],
+            [['name', 'picture'], 'string'],
         ];
     }
 
